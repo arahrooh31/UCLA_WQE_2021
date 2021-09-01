@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Jul 24 14:14:30 2021
 
-@author: Al Rahrooh
-"""
 #Loading Dependencies
 import pandas as pd
 import numpy as np
@@ -35,36 +30,26 @@ print(data.shape)
 #Splitting Up the Data
 cols1 = [21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,46]
 medical_history = data[data.columns[cols1]]
-medical_history
 
 cols2 = [1,2,3,4,5,6,7,8,166]
 demographic = data[data.columns[cols2]]
-demographic
 
 cols3 = [9,10,11,12,13,14,15,16,17,18,19,20,39,40,41,42,43,44,164]
 baseline_clinical_characteristics = data[data.columns[cols3]]
-baseline_clinical_characteristics
 
 cols4 = [47,48,49,50,51,52,53]
 echo = data[data.columns[cols4]]
-echo
 
 cols5 = [160,161,162,163,133,134,135,136,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,66,67,68,69,93,100,101,102,103,104,105,106,107,149,150,151,152,153,157,141,158,159,145,45]
 blood_work = data[data.columns[cols5]]
-blood_work
 
 cols6 = [121,122,123,124,126,114,115,116,117,118,108,109,110,111,112,92,65,94,95,96,97,98,99,137,138,139,140,146,132,119,120,124,125,127,128,129,130,131,156,148,142,143,144,147,154,155]
 metabolomics = data[data.columns[cols6]]
-metabolomics
 
 cols7 = [165,54,55,56,57,58,59,60,61,62,63,64]
 outcomes = data[data.columns[cols7]]
-outcomes
-
-
 
 ###Data Cleaning###
-
 
 
 #One Hot Encoding for Demographics Data
@@ -79,13 +64,9 @@ demographics_cleaned.to_csv(r'cleaned data/demographics_cleaned.csv', index=Fals
 
 
 #Imputing Missing Values for Baseline Clinical Chracteristics 
-print((baseline_clinical_characteristics == 0).sum())
 baseline_clinical_characteristics_cleaned = baseline_clinical_characteristics.replace(0, np.nan)
 baseline_clinical_characteristics_cleaned.fillna(baseline_clinical_characteristics.mean(), inplace=True)
-print(baseline_clinical_characteristics_cleaned.isnull().sum())
-print(baseline_clinical_characteristics_cleaned.shape)
 baseline_clinical_characteristics_cleaned.to_csv(r'cleaned data/clinical_cleaned.csv', index=False)
-
 
 #One Hot Encoding for Baseline Clinical Data
 baseline_clinical_characteristics_cleaned_ohe = baseline_clinical_characteristics_cleaned
@@ -101,9 +82,6 @@ baseline_clinical_characteristics_cleaned_ohe.to_csv(r'cleaned data/baseline_cli
 #Cleaning and One Hot Encoding for Outcome during hospitilization  
 cols8 = [55,56,57,58,59,60,63]
 outcomes = data[data.columns[cols8]]
-print(outcomes.shape)
-print((outcomes == 0).sum())
-
 outcome_during_hositilization = data[data.columns[54]]
 outcome_during_hositilization_ohe = pd.get_dummies(outcome_during_hositilization)
 outcomes_cleaned = pd.concat([outcomes, outcome_during_hositilization_ohe], axis = 1)
@@ -115,9 +93,6 @@ outcomes_cleaned.to_csv(r'cleaned data/outcomes_cleaned.csv', index=False)
 #Cleaning Echo Data
 echo_cleaned = echo.replace("NA", np.nan)
 echo_cleaned.fillna(echo.mean(), inplace = True)
-echo_cleaned
-print(echo_cleaned.isnull().sum())
-print(echo.shape)
 echo_cleaned.to_csv(r'cleaned data/echo_cleaned.csv', index = False)
 
 
@@ -137,20 +112,14 @@ medical_history_cleaned.to_csv(r'cleaned data/medical_history_cleaned.csv', inde
 
 #Cleaning Blood Work Data
 blood_work_cleaned = blood_work.replace(r'\s+( +\.)|#',np.nan,regex=True).replace('',np.nan)
-print(blood_work_cleaned.isnull().sum())
 blood_work_cleaned.fillna(blood_work_cleaned.mean(), inplace = True)
 blood_work_cleaned.to_csv(r'cleaned data/blood_work_cleaned.csv', index=False)
 
 
 #Cleaning Metabalomics Data
 metabolomics.to_csv(r'cleaned data/metabolomics_ugly.csv', index = False)
-print(metabolomics.isnull().sum())
-
 cols9 = [122,123,126,114,115,116,117,118,108,109,110,112,92,65,94,95,96,97,98,99,146,119,120,124,125,127,128,129,130,131,156,148,142,143,144,147,154,155]
 metabolomics_removed = data[data.columns[cols9]]
-metabolomics_removed
-print(metabolomics_removed.isnull().sum())
-
 metabolomics_cleaned = metabolomics_removed.replace('', np.nan)
 metabolomics_cleaned.fillna(metabolomics_cleaned.mean(), inplace = True)
 metabolomics_cleaned.to_csv(r'cleaned data/metabolomics_cleaned.csv', index = False)
@@ -184,8 +153,7 @@ scaled_cleaned_heart_disease_data_df1.to_csv(r'cleaned data/scaled data/scaled_c
 
 
 #EDA
-print(scaled_cleaned_heart_disease_data_df1.shape)
-print(scaled_cleaned_heart_disease_data_df1.isnull().sum())
+
 
 
 #corr = cleaned_heart_disease_data.corr
@@ -199,141 +167,8 @@ Y = pd.read_csv('cleaned data/scaled data/scaled_cleaned_heart_disease_data.csv'
 
 X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size = .3, random_state = 0)
 
-print(X.shape, Y.shape)
 
 
 ###MultiLabel Classification###
 
 #SKLearn
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#Neural Networks for Multiple Labels 
-#Keras
-import tensorflow as tf
-from tensorflow import keras
-from keras.models import Sequential
-from keras.layers import Dense
-from sklearn.model_selection import RepeatedKFold
-from numpy import mean
-from numpy import std
-
-# get the dataset
-def get_dataset():
-	X = pd.read_csv('cleaned data/scaled data/scaled_cleaned_heart_disease_data.csv', usecols = range(1,188), header = 0), y = pd.read_csv('cleaned data/scaled data/scaled_cleaned_heart_disease_data.csv', usecols = range(188,198), header = 0)
-	return X, y
- 
-# get the model
-def get_model(n_inputs, n_outputs):
-	model = Sequential()
-	model.add(Dense(20, input_dim=n_inputs, kernel_initializer='he_uniform', activation='relu'))
-	model.add(Dense(n_outputs, activation='sigmoid'))
-	model.compile(loss='binary_crossentropy', optimizer='adam')
-	return model
- 
-# evaluate a model using repeated k-fold cross-validation
-def evaluate_model(X, y):
-	results = list()
-	n_inputs, n_outputs = X.shape[1], y.shape[1]
-	# define evaluation procedure
-	cv = RepeatedKFold(n_splits=10, n_repeats=3, random_state=1)
-	# enumerate folds
-	for train_ix, test_ix in cv.split(X):
-		# prepare data
-		X_train, X_test = X[train_ix], X[test_ix]
-		y_train, y_test = y[train_ix], y[test_ix]
-		# define model
-		model = get_model(n_inputs, n_outputs)
-		# fit model
-		model.fit(X_train, y_train, verbose=0, epochs=100)
-		# make a prediction on the test set
-		yhat = model.predict(X_test)
-		# round probabilities to class labels
-		yhat = yhat.round()
-		# calculate accuracy
-		acc = accuracy_score(y_test, yhat)
-		# store result
-		print('>%.3f' % acc)
-		results.append(acc)
-	return results
- 
-# load dataset
-X, y = get_dataset()
-# evaluate model
-results = evaluate_model(X, y)
-# summarize performance
-print('Accuracy: %.3f (%.3f)' % (mean(results), std(results)))
-
-
-
-
-#Binary relevance
-classifier = BinaryRelevance(GaussianNB())
-classifier.fit(X_train, y_train)
-predictions = classifier.predict(X_test)
-accuracy_score(y_test,predictions)
-
-#Classifier chains
-classifier = ClassifierChain(GaussianNB())
-classifier.fit(X_train, y_train)
-predictions = classifier.predict(X_test)
-accuracy_score(y_test,predictions)
-
-#Label Powerset
-classifier = LabelPowerset(GaussianNB())
-classifier.fit(X_train, y_train)
-predictions = classifier.predict(X_test)
-accuracy_score(y_test,predictions)
-
-#Adapted Algorithm
-classifier = MLkNN(k=20)
-classifier.fit(X_train, y_train)
-predictions = classifier.predict(X_test)
-accuracy_score(y_test,predictions)
-
-
-
-#Network-based label space partition ensemble classification
-classifier = MajorityVotingClassifier(
-    clusterer = FixedLabelSpaceClusterer(clusters = [[1,3,4], [0, 2, 5]]),
-    classifier = ClassifierChain(classifier=GaussianNB())
-)
-classifier.fit(X_train,y_train)
-predictions = classifier.predict(X_test)
-accuracy_score(y_test,predictions)
-
-
-
-
-
-
-
-
-
-
-
-
-
-#Risk Analysis
-
-#Error Analysis
-
-#Feature Correlation
