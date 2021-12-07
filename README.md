@@ -1,1 +1,7 @@
 # UCLA_WQE_2021
+
+
+- Demonstrate the effectiveness of multiple supervised ML algorithms for the MLC on the Zhang Heart Failure EHR dataset.
+- This analysis aims to observe which ML is most successful in predicting the outcome of discharged HF patients and to see general trends that may aid us in model selection and hyper parameter selection.
+
+The current clinical process for Heart Failure diagnosis has poor accuracy and high costs, using Machine Learning will allow for an increase in efficiency and for the opportunity of automation. Assessing a patients’ risk of readmission, allows us to direct interventions more efficiently to decrease the burden of readmission not only for the system but also, especially, for patients. How to predict and therefore prevent readmission has been a significant challenge in outcomes research. To address this, a multi-label classification machine learning approach to predict readmission from Electronic Health Records is proposed. For evaluation, example-based metrics and label-based metrics are calculated for the 6 algorithms studied. The results show that the Extra Tree model performed the best for both label and example-based metrics compared to the studied models. This analysis presents a comparative study of six supervised ML methods fitted for the MLC of EHR data for HF outcome prediction; revealing clinical insights about readmission embedded in the data. Collectively, this method can make the human evaluation process more efficient and potentially facilitate the reduction of readmission rates.
